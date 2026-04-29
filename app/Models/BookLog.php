@@ -16,5 +16,6 @@ class BookLog extends Model
         'rating',
         'review',
         'read_date',
+        'cover_url',
     ];
 }

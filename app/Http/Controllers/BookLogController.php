@@ -24,6 +24,7 @@ class BookLogController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
+            'cover_url' => 'nullable|url',
             'rating' => 'nullable|integer|min:1|max:5',
             'review' => 'nullable|string',
             'read_date' => 'nullable|date',

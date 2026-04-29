@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
             $table->string('author');
+            $table->string('cover_url')->nullable();
             $table->integer('rating')->nullable();
             $table->text('review')->nullable();
             $table->date('read_date')->nullable();
