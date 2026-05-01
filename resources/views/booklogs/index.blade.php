@@ -1,48 +1,335 @@
-@extends('booklogs.layout')
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Letterbooks</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            body {
+                background: #0d0d0a;
+                color: #d4cdc5;
+                font-family: 'DM Sans', sans-serif;
+                font-weight: 300;
+                min-height: 100vh;
+            }
 
-@section('content')
-    <div class="container" style="max-width: 800px;">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <p class="lb-card-title mb-0">Meu diario de leituras</p>
-            <a href="{{ route('booklogs.create') }}" class="btn-letterbooks">Logar novo livro</a>
-        </div>
+            .lb-bg {
+                position: fixed;
+                inset: 0;
+                background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2000&auto=format&fit=crop');
+                background-size: cover;
+                background-position: center;
+                filter: grayscale(40%) brightness(0.18);
+                z-index: 0;
+                transform: scale(1.04);
+                animation: lb-slowZoom 20s ease-in-out infinite alternate;
+            }
 
-        <div class="d-flex flex-column gap-3">
-            @forelse ($books as $book)
-                <div class="lb-book-card d-flex gap-3">
-                    <div class="flex-shrink-0">
-                        <img src="{{ $book->cover_url ?? 'https://via.placeholder.com/96x144?text=Sem+Capa' }}"
-                             style="width: 96px; height: 144px; object-fit: cover; border: 1px solid rgba(255,255,255,0.06); border-radius: 2px;"
-                             alt="Capa">
+            @keyframes lb-slowZoom {
+                from { transform: scale(1.04); }
+                to   { transform: scale(1.10); }
+            }
+
+            .lb-wrapper {
+                position: relative;
+                z-index: 10;
+                animation: lb-fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+            }
+
+            @keyframes lb-fadeUp {
+                from { opacity: 0; transform: translateY(24px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
+
+            .lb-brand {
+                font-family: 'Cormorant Garamond', serif;
+                font-weight: 300;
+                font-size: 3.2rem;
+                letter-spacing: 0.25em;
+                color: #f0ebe3;
+                text-transform: uppercase;
+                text-decoration: none;
+            }
+
+            .lb-brand:hover { color: #f0ebe3; }
+
+            .lb-nav-link {
+                font-size: 0.72rem;
+                letter-spacing: 0.18em;
+                text-transform: uppercase;
+                color: #6b6257;
+                text-decoration: none;
+                border: 1px solid rgba(255,255,255,0.08);
+                padding: 0.45rem 1.2rem;
+                border-radius: 2px;
+                transition: color 0.2s, border-color 0.2s;
+                white-space: nowrap;
+            }
+
+            .lb-nav-link:hover {
+                color: #c9b99a;
+                border-color: rgba(201,185,154,0.3);
+            }
+
+            .lb-nav-link.primary {
+                background: #c9b99a;
+                color: #0d0c0a;
+                border-color: #c9b99a;
+            }
+
+            .lb-nav-link.primary:hover {
+                background: #d9c9aa;
+                border-color: #d9c9aa;
+                color: #0d0c0a;
+            }
+
+            .lb-card {
+                background: rgba(14, 12, 10, 0.75);
+                border: 1px solid rgba(255,255,255,0.07);
+                border-radius: 4px;
+                padding: 2.4rem 2.2rem;
+                backdrop-filter: blur(18px);
+                -webkit-backdrop-filter: blur(18px);
+            }
+
+            .lb-card-title {
+                font-family: 'Cormorant Garamond', serif;
+                font-weight: 300;
+                font-size: 1.1rem;
+                letter-spacing: 0.12em;
+                color: #8a8070;
+                text-transform: uppercase;
+                margin-bottom: 1.2rem;
+            }
+
+            .lb-version {
+                font-size: 0.68rem;
+                letter-spacing: 0.12em;
+                color: #3a3530;
+                text-transform: uppercase;
+            }
+
+            .lb-dropdown-item {
+                color: #8a8070;
+                font-size: 0.72rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                padding: 0.5rem 1.2rem;
+                transition: background 0.2s, color 0.2s;
+            }
+
+            .lb-dropdown-item:hover {
+                background: rgba(201,185,154,0.08);
+                color: #c9b99a;
+            }
+
+            .stat-box {
+                background: rgba(255,255,255,0.02);
+                border-radius: 2px;
+                padding: 1.2rem;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: #6b6257;
+            }
+
+            .stat-value {
+                color: #c9b99a;
+                margin: 0.3rem 0 0 0;
+                font-family: 'Cormorant Garamond', serif;
+                font-weight: 300;
+                font-size: 1.8rem;
+            }
+
+            .lb-book-card {
+                background: rgba(14, 12, 10, 0.55);
+                border: 1px solid rgba(255,255,255,0.05);
+                border-radius: 2px;
+                padding: 1.2rem;
+                transition: border-color 0.2s;
+            }
+
+            .lb-book-card:hover {
+                border-color: rgba(201,185,154,0.2);
+            }
+
+            .lb-book-title {
+                font-family: 'Cormorant Garamond', serif;
+                font-weight: 400;
+                font-size: 1rem;
+                color: #d4cdc5;
+                margin-bottom: 0.2rem;
+            }
+
+            .lb-book-author {
+                font-size: 0.72rem;
+                color: #6b6257;
+                letter-spacing: 0.06em;
+            }
+
+            .lb-badge {
+                font-size: 0.62rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 0.2rem 0.6rem;
+                border-radius: 2px;
+            }
+
+            .lb-badge-reading {
+                background: rgba(201,185,154,0.12);
+                color: #c9b99a;
+                border: 1px solid rgba(201,185,154,0.2);
+            }
+
+            .lb-badge-read {
+                background: rgba(140,130,110,0.08);
+                color: #8a8070;
+                border: 1px solid rgba(140,130,110,0.15);
+            }
+
+            .lb-badge-want {
+                background: rgba(180,160,140,0.06);
+                color: #a09580;
+                border: 1px solid rgba(180,160,140,0.12);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="lb-bg"></div>
+
+        <div class="lb-wrapper d-flex flex-column min-vh-100">
+
+            <nav class="navbar navbar-expand-sm w-100" style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                <div class="container-fluid px-4">
+                    <a href="{{ route('booklogs.index') }}" style="
+                        font-family: 'Cormorant Garamond', serif;
+                        font-weight: 300;
+                        font-size: 1.7rem;
+                        letter-spacing: 0.2em;
+                        color: #f0ebe3;
+                        text-transform: uppercase;
+                        text-decoration: none;
+                        padding: 0.5rem 0;
+                    ">Letterbooks</a>
+
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegacao">
+                        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27><path stroke=%27%236b6257%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/></svg>');"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarMain">
+                        <ul class="navbar-nav ms-auto align-items-sm-center gap-2 pt-3 pt-sm-0">
+                            <li class="nav-item">
+                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link primary">Meus Livros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('booklogs.create') }}" class="lb-nav-link">Registrar Leitura</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="lb-nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ Auth::user()->name }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end mt-2" style="background: rgba(14,12,10,0.96); border: 1px solid rgba(255,255,255,0.07); border-radius: 2px; padding: 0.4rem 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); min-width: 160px;">
+                                    <li>
+                                        <a href="{{ route('profile.edit') }}" class="dropdown-item lb-dropdown-item">Perfil</a>
+                                    </li>
+                                    <li><hr style="border-color: rgba(255,255,255,0.04); margin: 0.2rem 0;"></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item lb-dropdown-item w-100 text-start border-0 bg-transparent">Sair</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="d-flex flex-column flex-grow-1">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <div class="lb-book-title">{{ $book->title }}</div>
-                                <div class="lb-book-author">{{ $book->author }}</div>
+                </div>
+            </nav>
+
+            <main class="flex-grow-1 p-4">
+                <div class="container" style="max-width: 720px;">
+                    <div class="lb-card">
+                        <p class="lb-card-title">Visao geral</p>
+
+                        <!-- Dados Analíticos Dinâmicos -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-sm-4">
+                                <div class="stat-box">
+                                    <div class="stat-label">Total Registrados</div>
+                                    <div class="stat-value">{{ $books->count() }}</div>
+                                </div>
                             </div>
-                            <span class="lb-badge lb-badge-reading">Nota: {{ $book->rating ?? '-' }}/5</span>
+                            <div class="col-sm-4">
+                                <div class="stat-box">
+                                    <div class="stat-label">Com Resenha</div>
+                                    <div class="stat-value">{{ $books->whereNotNull('review')->count() }}</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="stat-box">
+                                    <div class="stat-label">Fila de Leitura</div>
+                                    <div class="stat-value">{{ $books->whereNull('read_date')->count() }}</div>
+                                </div>
+                            </div>
                         </div>
-                        <p class="flex-grow-1 mb-0" style="font-size: 0.78rem; color: #8a8070; line-height: 1.6;">
-                            {{ Str::limit($book->review, 100) }}
-                        </p>
-                        <div class="mt-2">
-                            <form action="{{ route('booklogs.destroy', $book) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-letterbooks-outline">Excluir</button>
-                            </form>
+
+                        <p class="lb-card-title" style="margin-top: 2rem;">Leituras recentes</p>
+
+                        <!-- Laço de Repetição com Dados Reais -->
+                        <div class="d-flex flex-column gap-2">
+                            @forelse ($books as $book)
+                                <div class="lb-book-card d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center gap-3">
+                                        @if($book->cover_url)
+                                            <img src="{{ $book->cover_url }}" alt="Capa" style="width: 40px; height: 60px; object-fit: cover; border-radius: 2px;">
+                                        @endif
+                                        <div>
+                                            <div class="lb-book-title">{{ $book->title }}</div>
+                                            <div class="lb-book-author">{{ $book->author }}</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center gap-2">
+                                        @if($book->rating)
+                                            <span class="lb-badge lb-badge-reading">Nota: {{ $book->rating }}/5</span>
+                                        @endif
+
+                                        @if($book->read_date)
+                                            <span class="lb-badge lb-badge-read">Lido em {{ \Carbon\Carbon::parse($book->read_date)->format('Y') }}</span>
+                                        @else
+                                            <span class="lb-badge lb-badge-want">Fila</span>
+                                        @endif
+                                        
+                                        <!-- Botão de Excluir discreto -->
+                                        <form action="{{ route('booklogs.destroy', $book) }}" method="POST" class="m-0 p-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link text-decoration-none p-0 ms-2" style="color: #6b6257; font-size: 0.8rem;" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#6b6257'">✕</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="text-center py-5" style="color: #8a8070; font-size: 0.85rem; border: 1px dashed rgba(255,255,255,0.05);">
+                                    Seu diário está vazio. <a href="{{ route('booklogs.create') }}" style="color: #c9b99a; text-decoration: none;">Comece a adicionar livros.</a>
+                                </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
-            @empty
-                <div class="lb-card">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="lb-feature-dot" style="margin-top: 0;"></div>
-                        <p class="mb-0" style="font-size: 0.85rem; color: #8a8070;">Voce ainda nao registrou nenhum livro.</p>
-                    </div>
-                </div>
-            @endforelse
+            </main>
+
+            <footer class="text-center py-4">
+                <span class="lb-version">Letterbooks — v{{ app()->version() }}</span>
+            </footer>
+
         </div>
-    </div>
-@endsection
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
