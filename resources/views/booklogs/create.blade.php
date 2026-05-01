@@ -73,7 +73,7 @@ async function searchBook() {
     button.disabled = true;
     button.textContent = 'Buscando...';
 
-    const apiKey = 'AIzaSyDqZ5gYE_-qk61riRW0R1l97yv_5JAf1HM';
+    const apiKey = '{{ env("GOOGLE_BOOKS_API") }}';
 
     try {
         const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&langRestrict=pt&maxResults=1&key=${apiKey}`);
