@@ -56,6 +56,15 @@
                 <textarea name="review" class="form-control" rows="4" style="resize: vertical;"></textarea>
             </div>
 
+            <div class="mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="is_favorite" id="is_favorite" value="1">
+                    <label class="form-check-label" for="is_favorite" style="color: #c9b99a; font-size: 0.85rem;">
+                        Marcar como favorito ❤️
+                    </label>
+                </div>
+            </div>
+
             <div class="d-flex justify-content-end gap-2">
                 <a href="{{ route('booklogs.index') }}" class="btn-letterbooks-outline" style="font-size: 0.72rem; padding: 0.45rem 1.2rem;">Cancelar</a>
                 <button type="submit" class="btn-letterbooks">Salvar no diario</button>

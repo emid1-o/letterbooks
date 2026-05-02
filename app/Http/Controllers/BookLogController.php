@@ -29,7 +29,7 @@ class BookLogController extends Controller
             'review' => 'nullable|string',
             'read_date' => 'nullable|date',
         ]);
-
+        $validated['is_favorite'] = $request->has('is_favorite');
         $validated['user_id'] = Auth::id();
         BookLog::create($validated);
 
