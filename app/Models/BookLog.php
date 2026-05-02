@@ -17,5 +17,6 @@ class BookLog extends Model
         'review',
         'read_date',
         'cover_url',
+        'is_favorite',
     ];
 }

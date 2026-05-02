@@ -258,26 +258,53 @@
                         <p class="lb-card-title">Visao geral</p>
 
                         <!-- Dados Analíticos Dinâmicos -->
-                        <div class="row g-3 mb-4">
-                            <div class="col-sm-4">
-                                <div class="stat-box">
+                        <div class="row g-3 mb-4 justify-content-center">
+                            <div class="col-6 col-sm-5">
+                                <div class="stat-box text-center">
                                     <div class="stat-label">Total Registrados</div>
                                     <div class="stat-value">{{ $books->count() }}</div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="stat-box">
+                            <div class="col-6 col-sm-5">
+                                <div class="stat-box text-center">
                                     <div class="stat-label">Com Resenha</div>
                                     <div class="stat-value">{{ $books->whereNotNull('review')->count() }}</div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="stat-box">
+                            <div class="col-6 col-sm-5">
+                                <div class="stat-box text-center">
                                     <div class="stat-label">Fila de Leitura</div>
                                     <div class="stat-value">{{ $books->whereNull('read_date')->count() }}</div>
                                 </div>
                             </div>
+                            <div class="col-6 col-sm-5">
+                                <div class="stat-box text-center">
+                                    <div class="stat-label">Favoritos</div>
+                                    <div class="stat-value" style="color: #c9b99a;">{{ $books->where('is_favorite', true)->count() }}</div>
+                                </div>
+                            </div>
                         </div>
+
+                        @php
+                            $favoritos = $books->where('is_favorite', true)->take(10);
+                        @endphp
+
+                        @if($favoritos->count() > 0)
+                            <p class="lb-card-title" style="margin-top: 2rem;">Sua Coleção Especial</p>
+                            <div class="d-flex flex-row gap-3 mb-4 pb-2" style="overflow-x: auto; white-space: nowrap; scrollbar-width: thin;">
+                                @foreach($favoritos as $fav)
+                                    <div class="stat-box d-flex align-items-center" style="min-width: 220px; flex: 0 0 auto; padding: 0.7rem; border-left: 3px solid #c9b99a;">
+                                        @if($fav->cover_url)
+                                            <img src="{{ $fav->cover_url }}" alt="Capa" style="width: 30px; height: 45px; object-fit: cover; border-radius: 2px; margin-right: 10px;">
+                                        @endif
+                                        <div style="overflow: hidden; line-height: 1.2;">
+                                            <div class="lb-book-title" style="font-size: 0.85rem; text-overflow: ellipsis; overflow: hidden;">{{ $fav->title }}</div>
+                                            <div class="lb-book-author" style="font-size: 0.7rem; opacity: 0.8;">{{ $fav->author }}</div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
 
                         <p class="lb-card-title" style="margin-top: 2rem;">Leituras recentes</p>
 
@@ -290,7 +317,11 @@
                                             <img src="{{ $book->cover_url }}" alt="Capa" style="width: 40px; height: 60px; object-fit: cover; border-radius: 2px;">
                                         @endif
                                         <div>
-                                            <div class="lb-book-title">{{ $book->title }}</div>
+                                            <div class="lb-book-title">{{ $book->title }}
+                                                @if($book->is_favorite)
+                                                    <span style="color: #c9b99a; font-size: 0.8rem; margin-left: 4px;">❤</span>
+                                                @endif
+                                            </div>
                                             <div class="lb-book-author">{{ $book->author }}</div>
                                         </div>
                                     </div>
