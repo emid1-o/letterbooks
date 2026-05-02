@@ -3,12 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Letterbooks</title>
+        <title>Letterbooks - Todos os Livros</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        
         <style>
-            body {
+             body {
                 background: #0d0d0a;
                 color: #d4cdc5;
                 font-family: 'DM Sans', sans-serif;
@@ -218,34 +219,10 @@
                         padding: 0.5rem 0;
                     ">Letterbooks</a>
 
-                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegacao">
-                        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27><path stroke=%27%236b6257%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/></svg>');"></span>
-                    </button>
-
                     <div class="collapse navbar-collapse" id="navbarMain">
                         <ul class="navbar-nav ms-auto align-items-sm-center gap-2 pt-3 pt-sm-0">
                             <li class="nav-item">
-                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link primary">Meus Livros</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('booklogs.create') }}" class="lb-nav-link">Registrar Leitura</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a href="#" class="lb-nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end mt-2" style="background: rgba(14,12,10,0.96); border: 1px solid rgba(255,255,255,0.07); border-radius: 2px; padding: 0.4rem 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); min-width: 160px;">
-                                    <li>
-                                        <a href="{{ route('profile.edit') }}" class="dropdown-item lb-dropdown-item">Perfil</a>
-                                    </li>
-                                    <li><hr style="border-color: rgba(255,255,255,0.04); margin: 0.2rem 0;"></li>
-                                    <li>
-                                        <form method="POST" action="{{ route('logout') }}">
-                                            @csrf
-                                            <button type="submit" class="dropdown-item lb-dropdown-item w-100 text-start border-0 bg-transparent">Sair</button>
-                                        </form>
-                                    </li>
-                                </ul>
+                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link">Voltar ao Painel</a>
                             </li>
                         </ul>
                     </div>
@@ -255,68 +232,10 @@
             <main class="flex-grow-1 p-4">
                 <div class="container" style="max-width: 1100px;">
                     <div class="lb-card">
-                        <p class="lb-card-title">Visao geral</p>
+                        <p class="lb-card-title">Histórico Completo de Leituras</p>
 
-                        
-                        <div class="row g-3 mb-4 justify-content-center">
-                            <div class="col-6 col-sm-5">
-                                <div class="stat-box text-center">
-                                    <div class="stat-label">Total Registrados</div>
-                                    <div class="stat-value">{{ $books->count() }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-5">
-                                <div class="stat-box text-center">
-                                    <div class="stat-label">Com Resenha</div>
-                                    <div class="stat-value">{{ $books->whereNotNull('review')->count() }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-5">
-                                <div class="stat-box text-center">
-                                    <div class="stat-label">Fila de Leitura</div>
-                                    <div class="stat-value">{{ $books->whereNull('read_date')->count() }}</div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-5">
-                                <div class="stat-box text-center">
-                                    <div class="stat-label">Favoritos</div>
-                                    <div class="stat-value" style="color: #c9b99a;">{{ $books->where('is_favorite', true)->count() }}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        @php
-                            $favoritos = $books->where('is_favorite', true)->take(10);
-                        @endphp
-
-                        @if($favoritos->count() > 0)
-                            <p class="lb-card-title" style="margin-top: 2rem;">Sua Coleção Especial</p>
-                            <div class="d-flex flex-row gap-3 mb-4 pb-2" style="overflow-x: auto; white-space: nowrap; scrollbar-width: thin;">
-                                @foreach($favoritos as $fav)
-                                    <div class="stat-box d-flex align-items-center" style="min-width: 220px; flex: 0 0 auto; padding: 0.7rem; border-left: 3px solid #c9b99a;">
-                                        @if($fav->cover_url)
-                                            <img src="{{ $fav->cover_url }}" alt="Capa" style="width: 30px; height: 45px; object-fit: cover; border-radius: 2px; margin-right: 10px;">
-                                        @endif
-                                        <div style="overflow: hidden; line-height: 1.2;">
-                                            <div class="lb-book-title" style="font-size: 0.85rem; text-overflow: ellipsis; overflow: hidden;">{{ $fav->title }}</div>
-                                            <div class="lb-book-author" style="font-size: 0.7rem; opacity: 0.8;">{{ $fav->author }}</div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
-
-                        <div class="d-flex justify-content-between align-items-baseline" style="margin-top: 2rem; margin-bottom: 1.2rem;">
-                            <p class="lb-card-title m-0">Leituras recentes</p>
-                            @if($books->count() > 5)
-                                <a href="{{ route('booklogs.all') }}" style="color: #c9b99a; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">Ver todos ({{ $books->count() }}) →</a>
-                            @endif
-                        </div>
-
-                        
                         <div class="d-flex flex-column gap-2">
-                            @forelse ($books->take(5) as $book)
-                                
+                            @forelse ($books as $book)
                                 <div class="lb-book-card d-flex justify-content-between align-items-center">
                                     <div class="d-flex align-items-center gap-3">
                                         @if($book->cover_url)
@@ -343,7 +262,6 @@
                                             <span class="lb-badge lb-badge-want">Fila</span>
                                         @endif
                                         
-                                        <!-- Botão de Excluir discreto -->
                                         <form action="{{ route('booklogs.destroy', $book) }}" method="POST" class="m-0 p-0">
                                             @csrf
                                             @method('DELETE')
@@ -353,7 +271,7 @@
                                 </div>
                             @empty
                                 <div class="text-center py-5" style="color: #8a8070; font-size: 0.85rem; border: 1px dashed rgba(255,255,255,0.05);">
-                                    Seu diário está vazio. <a href="{{ route('booklogs.create') }}" style="color: #c9b99a; text-decoration: none;">Comece a adicionar livros.</a>
+                                    Seu histórico está vazio.
                                 </div>
                             @endforelse
                         </div>
@@ -366,7 +284,5 @@
             </footer>
 
         </div>
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

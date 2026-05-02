@@ -197,7 +197,7 @@
                     </a>
 
                     <div class="mt-3">
-                        <!-- Formulário 1: Atualizar Informações -->
+                        
                         <div class="lb-card">
                             <h2 class="lb-card-title">Informações do Perfil</h2>
                             
@@ -226,7 +226,7 @@
                             </form>
                         </div>
 
-                        <!-- Formulário 2: Atualizar Senha -->
+                        
                         <div class="lb-card">
                             <h2 class="lb-card-title">Atualizar Senha</h2>
                             

@@ -12,6 +12,10 @@ Route::get('/dashboard', function () {
     return redirect()->route('booklogs.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/booklogs/all', [BookLogController::class, 'all'])
+    ->name('booklogs.all')
+    ->middleware(['auth', 'verified']);
+
 Route::resource('booklogs', BookLogController::class)
     ->only(['index', 'create', 'store', 'destroy'])
     ->middleware(['auth', 'verified']);

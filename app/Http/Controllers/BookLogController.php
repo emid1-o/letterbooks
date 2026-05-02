@@ -14,6 +14,12 @@ class BookLogController extends Controller
         return view('booklogs.index', compact('books'));
     }
 
+    public function all()
+    {
+        $books = BookLog::where('user_id', Auth::id())->orderByDesc('read_date')->get();
+        return view('booklogs.all', compact('books'));
+    }
+
     public function create()
     {
         return view('booklogs.create');
