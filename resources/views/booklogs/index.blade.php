@@ -257,6 +257,35 @@
                     <div class="lb-card">
                         <p class="lb-card-title">Visao geral</p>
 
+                        {{-- @var $percentage float --}}
+                        {{-- @var $goal int --}}
+                        {{-- @var $booksReadThisYear int --}}
+
+                        <div class="card bg-dark text-white p-4 mb-4" style="border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h5 class="mb-0" style="color: #c9b99a;">Minha Meta de {{ date('Y') }}</h5>
+                                    <form action="{{ route('user.updateGoal') }}" method="POST" class="mt-1">
+                                        @csrf
+                                        <label style="font-size: 0.8rem; color: #8a8070;">Meta anual: </label>
+                                        <input type="number" name="reading_goal" value="{{ $goal }}" 
+                                            onchange="this.form.submit()"
+                                            style="background: transparent; border: none; border-bottom: 1px solid #c9b99a; color: #c9b99a; width: 45px; text-align: center; font-weight: bold;">
+                                    </form>
+                                </div>
+                                <div class="text-end">
+                                    <span style="font-size: 1.5rem; font-weight: bold; color: #fff;">{{ $booksReadThisYear }}</span>
+                                    <span style="color: #8a8070;">/ {{ $goal }} livros</span>
+                                </div>
+                            </div>
+
+                            <div class="progress" style="height: 12px; background-color: rgba(255,255,255,0.05); border-radius: 10px;">
+                               <div class="progress-bar" role="progressbar" 
+                                    style="--progress-width: {{ $percentage }}%; width: var(--progress-width); background: linear-gradient(90deg, #c9b99a, #e2d5ba);" 
+                                    aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
                         
                         <div class="row g-3 mb-4 justify-content-center">
                             <div class="col-6 col-sm-5">
