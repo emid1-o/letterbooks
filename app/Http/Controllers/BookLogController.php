@@ -10,8 +10,36 @@ class BookLogController extends Controller
 {
     public function index()
     {
-        $books = BookLog::where('user_id', Auth::id())->orderByDesc('read_date')->get();
-        return view('booklogs.index', compact('books'));
+        $user = Auth::user();
+        $goal = $user->reading_goal ?? 12;
+        
+        $booksReadThisYear = BookLog::where('user_id', $user->id)
+            ->whereYear('read_date', date('Y'))
+            ->count();
+
+        $percentage = ($goal > 0) ? ($booksReadThisYear / $goal) * 100 : 0;
+        $percentage = min($percentage, 100);
+
+        $books = BookLog::where('user_id', $user->id)
+            ->orderBy('read_date', 'desc')
+            ->get();
+
+        return view('booklogs.index', compact('books', 'booksReadThisYear', 'goal', 'percentage'));
+    }
+
+    public function updateGoal(Request $request)
+    {
+        $request->validate([
+            'reading_goal' => 'required|integer|min:1|max:999'
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        
+        $user->reading_goal = $request->reading_goal;
+        $user->save();
+
+        return back()->with('success', 'Meta atualizada!');
     }
 
     public function all()
