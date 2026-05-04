@@ -234,40 +234,50 @@
                     <div class="lb-card">
                         <p class="lb-card-title">Histórico Completo de Leituras</p>
 
-                        <div class="d-flex flex-column gap-2">
+                        <div class="d-flex flex-column gap-3">
                             @forelse ($books as $book)
-                                <div class="lb-book-card d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center gap-3">
-                                        @if($book->cover_url)
-                                            <img src="{{ $book->cover_url }}" alt="Capa" style="width: 40px; height: 60px; object-fit: cover; border-radius: 2px;">
-                                        @endif
-                                        <div>
-                                            <div class="lb-book-title">{{ $book->title }}
-                                                @if($book->is_favorite)
-                                                    <span style="color: #c9b99a; font-size: 0.8rem; margin-left: 4px;">❤</span>
-                                                @endif
+                                <div class="lb-book-card d-flex flex-column gap-3">
+                                    
+                                    
+                                    <div class="d-flex justify-content-between align-items-start align-items-sm-center flex-column flex-sm-row gap-3">
+                                        <div class="d-flex align-items-center gap-3">
+                                            @if($book->cover_url)
+                                                <img src="{{ $book->cover_url }}" alt="Capa" style="width: 45px; height: 68px; object-fit: cover; border-radius: 2px;">
+                                            @endif
+                                            <div>
+                                                <div class="lb-book-title" style="font-size: 1.1rem;">{{ $book->title }}
+                                                    @if($book->is_favorite)
+                                                        <span style="color: #c9b99a; font-size: 0.8rem; margin-left: 4px;">❤</span>
+                                                    @endif
+                                                </div>
+                                                <div class="lb-book-author">{{ $book->author }}</div>
                                             </div>
-                                            <div class="lb-book-author">{{ $book->author }}</div>
+                                        </div>
+                                        
+                                        <div class="d-flex align-items-center gap-2 mt-2 mt-sm-0">
+                                            @if($book->rating)
+                                                <span class="lb-badge lb-badge-reading">Nota: {{ $book->rating }}/5</span>
+                                            @endif
+
+                                            @if($book->read_date)
+                                                <span class="lb-badge lb-badge-read">Lido em {{ \Carbon\Carbon::parse($book->read_date)->format('Y') }}</span>
+                                            @else
+                                                <span class="lb-badge lb-badge-want">Fila</span>
+                                            @endif
+                                            
+                                            <form action="{{ route('booklogs.destroy', $book) }}" method="POST" class="m-0 p-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-link text-decoration-none p-0 ms-2" style="color: #6b6257; font-size: 0.8rem;" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#6b6257'">✕</button>
+                                            </form>
                                         </div>
                                     </div>
-                                    
-                                    <div class="d-flex align-items-center gap-2">
-                                        @if($book->rating)
-                                            <span class="lb-badge lb-badge-reading">Nota: {{ $book->rating }}/5</span>
-                                        @endif
 
-                                        @if($book->read_date)
-                                            <span class="lb-badge lb-badge-read">Lido em {{ \Carbon\Carbon::parse($book->read_date)->format('Y') }}</span>
-                                        @else
-                                            <span class="lb-badge lb-badge-want">Fila</span>
-                                        @endif
-                                        
-                                        <form action="{{ route('booklogs.destroy', $book) }}" method="POST" class="m-0 p-0">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-link text-decoration-none p-0 ms-2" style="color: #6b6257; font-size: 0.8rem;" onmouseover="this.style.color='#dc3545'" onmouseout="this.style.color='#6b6257'">✕</button>
-                                        </form>
-                                    </div>
+                                    
+                                    @if($book->review)
+                                        <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem; color: #a09580; font-size: 0.9rem; font-weight: 300; line-height: 1.6; white-space: pre-line;">"{{ $book->review }}"</div>
+                                    @endif
+
                                 </div>
                             @empty
                                 <div class="text-center py-5" style="color: #8a8070; font-size: 0.85rem; border: 1px dashed rgba(255,255,255,0.05);">
