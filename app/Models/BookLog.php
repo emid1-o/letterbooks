@@ -19,4 +19,9 @@ class BookLog extends Model
         'cover_url',
         'is_favorite',
     ];
+
+    public function bookLists()
+    {
+        return $this->belongsToMany(BookList::class);
+    }
 }

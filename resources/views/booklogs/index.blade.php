@@ -230,6 +230,9 @@
                             <li class="nav-item">
                                 <a href="{{ route('booklogs.create') }}" class="lb-nav-link">Registrar Leitura</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('booklists.index') }}" class="lb-nav-link">Minhas Listas</a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a href="#" class="lb-nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     {{ Auth::user()->name }}

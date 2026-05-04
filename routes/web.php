@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookLogController;
+use App\Http\Controllers\BookListController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +15,10 @@ Route::get('/dashboard', function () {
 
 Route::get('/booklogs/all', [BookLogController::class, 'all'])
     ->name('booklogs.all')
+    ->middleware(['auth', 'verified']);
+
+Route::resource('booklists', BookListController::class)
+    ->only(['index', 'create', 'store', 'show', 'destroy'])
     ->middleware(['auth', 'verified']);
 
 Route::resource('booklogs', BookLogController::class)
