@@ -371,8 +371,9 @@
                                         @else
                                             <span class="lb-badge lb-badge-want">Fila</span>
                                         @endif
+
+                                        <a href="{{ route('booklogs.edit', $book) }}" style="color: #6b6257; font-size: 0.8rem; text-decoration: none;" onmouseover="this.style.color='#c9b99a'" onmouseout="this.style.color='#6b6257'">✎</a>
                                         
-                                        <!-- Botão de Excluir discreto -->
                                         <form action="{{ route('booklogs.destroy', $book) }}" method="POST" class="m-0 p-0">
                                             @csrf
                                             @method('DELETE')

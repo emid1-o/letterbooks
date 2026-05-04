@@ -17,7 +17,7 @@ Route::get('/booklogs/all', [BookLogController::class, 'all'])
     ->middleware(['auth', 'verified']);
 
 Route::resource('booklogs', BookLogController::class)
-    ->only(['index', 'create', 'store', 'destroy'])
+    ->only(['index', 'create', 'store', 'destroy', 'edit', 'update'])
     ->middleware(['auth', 'verified']);
 
 Route::middleware('auth')->group(function () {

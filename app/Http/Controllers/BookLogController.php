@@ -53,6 +53,34 @@ class BookLogController extends Controller
         return view('booklogs.create');
     }
 
+    public function update(Request $request, BookLog $booklog)
+    {
+        if ($booklog->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'rating' => 'nullable|integer|min:1|max:5',
+            'review' => 'nullable|string',
+            'read_date' => 'nullable|date',
+        ]);
+
+        $validated['is_favorite'] = $request->has('is_favorite');
+
+        $booklog->update($validated);
+
+        return redirect()->route('booklogs.index');
+    }
+
+    public function edit(BookLog $booklog)
+    {
+        if ($booklog->user_id !== Auth::id()) {
+            abort(403);
+        }
+        
+        return view('booklogs.edit', compact('booklog'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
