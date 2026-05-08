@@ -29,4 +29,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function likedLogs()
+    {
+        return $this->belongsToMany(BookLog::class, 'likes');
+    }
+
+    public function bookLogs()
+    {
+        return $this->hasMany(BookLog::class);
+    }
 }

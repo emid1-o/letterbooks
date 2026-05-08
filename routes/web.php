@@ -32,4 +32,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/update-goal', [BookLogController::class, 'updateGoal'])->name('user.updateGoal');
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/users/search', [App\Http\Controllers\UserController::class, 'search'])->name('users.search');
+    Route::get('/users/{user}', [App\Http\Controllers\UserController::class, 'show'])->name('users.show');
+    Route::post('/booklogs/{booklog}/like', [App\Http\Controllers\BookLogController::class, 'toggleLike'])->name('booklogs.like');
+    
+    Route::get('/booklogs/all', [App\Http\Controllers\BookLogController::class, 'all'])->name('booklogs.all');
+    Route::resource('booklogs', App\Http\Controllers\BookLogController::class)->except(['show']);
+    Route::resource('booklists', App\Http\Controllers\BookListController::class);
+});
+
 require __DIR__.'/auth.php';

@@ -24,4 +24,14 @@ class BookLog extends Model
     {
         return $this->belongsToMany(BookList::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'likes');
+    }
 }

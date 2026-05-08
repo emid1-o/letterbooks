@@ -219,10 +219,45 @@
                         padding: 0.5rem 0;
                     ">Letterbooks</a>
 
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegacao">
+                        <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27><path stroke=%27%236b6257%27 stroke-linecap=%27round%27 stroke-miterlimit=%2710%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/></svg>');"></span>
+                    </button>
+
                     <div class="collapse navbar-collapse" id="navbarMain">
+                        
+                        <form action="{{ route('users.search') }}" method="GET" class="d-flex mx-auto my-3 my-sm-0" style="max-width: 300px; width: 100%;">
+                            <input type="text" name="q" class="form-control" placeholder="Buscar usuários..." style="border-radius: 20px; padding: 0.3rem 1rem; font-size: 0.8rem;" required>
+                        </form>
+
                         <ul class="navbar-nav ms-auto align-items-sm-center gap-2 pt-3 pt-sm-0">
                             <li class="nav-item">
-                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link">Voltar ao Painel</a>
+                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link primary">Painel</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('booklists.index') }}" class="lb-nav-link">Listas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('booklogs.create') }}" class="lb-nav-link">Registrar</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="lb-nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ Auth::user()->name }}
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end mt-2" style="background: rgba(14,12,10,0.96); border: 1px solid rgba(255,255,255,0.07); border-radius: 2px; padding: 0.4rem 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); min-width: 160px;">
+                                    <li>
+                                        <a href="{{ route('users.show', Auth::id()) }}" class="dropdown-item lb-dropdown-item">Meu Perfil Público</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('profile.edit') }}" class="dropdown-item lb-dropdown-item">Configurações</a>
+                                    </li>
+                                    <li><hr style="border-color: rgba(255,255,255,0.04); margin: 0.2rem 0;"></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item lb-dropdown-item w-100 text-start border-0 bg-transparent">Sair</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>

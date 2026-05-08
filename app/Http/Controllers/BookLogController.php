@@ -105,4 +105,10 @@ class BookLogController extends Controller
         }
         return redirect()->route('booklogs.index');
     }
+
+    public function toggleLike(BookLog $booklog)
+    {
+        $booklog->likes()->toggle(Auth::id());
+        return back();
+    }
 }

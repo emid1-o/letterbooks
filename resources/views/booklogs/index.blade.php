@@ -205,7 +205,7 @@
 
         <div class="lb-wrapper d-flex flex-column min-vh-100">
 
-            <nav class="navbar navbar-expand-sm w-100" style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+           <nav class="navbar navbar-expand-sm w-100" style="border-bottom: 1px solid rgba(255,255,255,0.04);">
                 <div class="container-fluid px-4">
                     <a href="{{ route('booklogs.index') }}" style="
                         font-family: 'Cormorant Garamond', serif;
@@ -223,15 +223,20 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarMain">
+                        
+                        <form action="{{ route('users.search') }}" method="GET" class="d-flex mx-auto my-3 my-sm-0" style="max-width: 300px; width: 100%;">
+                            <input type="text" name="q" class="form-control" placeholder="Buscar usuários..." style="border-radius: 20px; padding: 0.3rem 1rem; font-size: 0.8rem;" required>
+                        </form>
+
                         <ul class="navbar-nav ms-auto align-items-sm-center gap-2 pt-3 pt-sm-0">
                             <li class="nav-item">
-                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link primary">Meus Livros</a>
+                                <a href="{{ route('booklogs.index') }}" class="lb-nav-link primary">Painel</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('booklogs.create') }}" class="lb-nav-link">Registrar Leitura</a>
+                                <a href="{{ route('booklists.index') }}" class="lb-nav-link">Listas</a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('booklists.index') }}" class="lb-nav-link">Minhas Listas</a>
+                                <a href="{{ route('booklogs.create') }}" class="lb-nav-link">Registrar</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a href="#" class="lb-nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -239,7 +244,10 @@
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end mt-2" style="background: rgba(14,12,10,0.96); border: 1px solid rgba(255,255,255,0.07); border-radius: 2px; padding: 0.4rem 0; backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); min-width: 160px;">
                                     <li>
-                                        <a href="{{ route('profile.edit') }}" class="dropdown-item lb-dropdown-item">Perfil</a>
+                                        <a href="{{ route('users.show', Auth::id()) }}" class="dropdown-item lb-dropdown-item">Meu Perfil Público</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('profile.edit') }}" class="dropdown-item lb-dropdown-item">Configurações</a>
                                     </li>
                                     <li><hr style="border-color: rgba(255,255,255,0.04); margin: 0.2rem 0;"></li>
                                     <li>
